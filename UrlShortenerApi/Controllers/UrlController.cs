@@ -3,11 +3,18 @@
     using Microsoft.AspNetCore.Mvc;
     using System;
     using UrlShortenerApi.Contracts;
+    using UrlShortenerApi.DataAccess;
 
     [Route("v1/[controller]")]
     [ApiController]
     public class UrlsController : ControllerBase
     {
+        private readonly IUrlShortcutRepository repository;
+        public UrlsController(IUrlShortcutRepository repository)
+        {
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        }
+
         public static IList<UrlShortcut> Shortcuts { get; set; } = new List<UrlShortcut>
         {
             new UrlShortcut
@@ -19,8 +26,10 @@
 
         // GET: v1/<UrlController>
         [HttpGet]
-        public IEnumerable<UrlShortcut> Get()
+        public async Task<IEnumerable<UrlShortcut>> Get()
         {
+            var shortcut = await repository.GetUrlShortcutAsync("xyz");
+            Console.Write(shortcut);
             return Shortcuts;
         }
 
@@ -28,8 +37,9 @@
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var shortcut = Shortcuts.FirstOrDefault( s => string.Equals(s.Shortcut, id, StringComparison.OrdinalIgnoreCase));
-            if (shortcut == null) {
+            var shortcut = Shortcuts.FirstOrDefault(s => string.Equals(s.Shortcut, id, StringComparison.OrdinalIgnoreCase));
+            if (shortcut == null)
+            {
                 return await Task.FromResult(NotFound());
             }
 
