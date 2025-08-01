@@ -28,7 +28,7 @@
 
             if (response == null || response.Resource == null)
             {
-                return Result<UrlShortcut>.Failure($"No URL shortcut found for '{shortcut}'.");
+                return Result<UrlShortcut>.Failure(ResultCode.NotFound, $"No URL shortcut found for '{shortcut}'.");
             }
 
             return Result<UrlShortcut>.Success(
