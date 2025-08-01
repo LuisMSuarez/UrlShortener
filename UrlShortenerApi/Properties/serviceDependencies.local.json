@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "cosmosdb1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('serviceConnectorResourceGroupName')]/providers/Microsoft.ServiceLinker/locations/westus2/connectors/ConnectionStringsCosmosDBConnection_16DA689575",
+      "secretStore": "LocalSecretsFile",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.DocumentDB/databaseAccounts/document-storage",
+      "type": "cosmosdb.azure",
+      "connectionId": "ConnectionStrings:CosmosDBConnection",
+      "dynamicId": null
+    }
+  }
+}
