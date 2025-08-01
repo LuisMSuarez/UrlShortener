@@ -1,10 +1,10 @@
-
-using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.Options;
-using UrlShortenerApi.DataAccess;
-
 namespace UrlShortenerApi
 {
+    using Microsoft.Azure.Cosmos;
+    using Microsoft.Extensions.Options;
+    using UrlShortenerApi.DataAccess;
+    using UrlShortenerApi.Services;
+
     public class Program
     {
         public static void Main(string[] args)
@@ -26,6 +26,8 @@ namespace UrlShortenerApi
             });
 
             builder.Services.AddScoped<IUrlShortcutRepository, CosmosDbUrlShortcutRepository>();
+            builder.Services.AddScoped<IUrlShortcutService, UrlShortcutService>();
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

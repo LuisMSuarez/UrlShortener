@@ -1,9 +1,9 @@
-﻿using UrlShortenerApi.Contracts;
-
-namespace UrlShortenerApi.DataAccess
+﻿namespace UrlShortenerApi.DataAccess
 {
+    using UrlShortenerApi.DataAccess.Contracts;
+
     public interface IUrlShortcutRepository
     {
-        Task<UrlShortcut> GetUrlShortcutAsync(string shortcut);
+        Task<RepositoryUrlShortcut> GetUrlShortcutAsync(string shortcut);
     }
 }

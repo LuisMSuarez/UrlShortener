@@ -11,9 +11,19 @@ namespace UrlShortenerApi.Services
             this.urlShortcutRepository = urlShortcutRepository ?? throw new ArgumentNullException(nameof(urlShortcutRepository));
         }
 
-        public Task<UrlShortcut> GetUrlShortcutAsync(string shortcut)
+        public async Task<UrlShortcut> GetUrlShortcutAsync(string shortcut)
         {
-            return this.urlShortcutRepository.GetUrlShortcutAsync(shortcut);
+            var repositoryShortcut = await this.urlShortcutRepository.GetUrlShortcutAsync(shortcut);
+            if (repositoryShortcut == null)
+            {
+                throw new NullReferenceException(nameof(repositoryShortcut));
+            }
+
+            return new UrlShortcut
+            { 
+                Url = repositoryShortcut.Url,
+                Shortcut = repositoryShortcut.Id
+            };
         }
     }
 }
