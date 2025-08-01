@@ -23,11 +23,9 @@ namespace UrlShortenerApi.DataAccess
 
             database = await database.ReadAsync();
             Console.WriteLine($"Database Id: {database.Id}");
-            return new UrlShortcut
-            {
-                Shortcut = shortcut,
-                Url = $"https://{configuration.AzureCosmosDB.Endpoint}/{configuration.AzureCosmosDB.ContainerName}/{shortcut}"
-            };
+            Container container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
+            var response = await container.ReadItemAsync<UrlShortcut>("967157c1-53c1-4ca1-8d6c-eab8722f2a7e", new PartitionKey(shortcut));
+            return response.Resource;
         }
     }
 }
