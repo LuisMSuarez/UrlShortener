@@ -1,9 +1,10 @@
-﻿using UrlShortenerApi.Contracts;
-
-namespace UrlShortenerApi.Services
+﻿namespace UrlShortenerApi.Services
 {
+    using UrlShortenerApi.Common;
+    using UrlShortenerApi.Contracts;
+
     public interface IUrlShortcutService
     {
-        Task<UrlShortcut> GetUrlShortcutAsync(string shortcut);
+        Task<Result<UrlShortcut>> GetUrlShortcutAsync(string shortcut);
     }
 }

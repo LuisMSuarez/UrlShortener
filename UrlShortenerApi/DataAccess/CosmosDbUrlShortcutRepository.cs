@@ -2,6 +2,8 @@
 {
     using Microsoft.Azure.Cosmos;
     using Microsoft.Extensions.Options;
+    using UrlShortenerApi.Common;
+    using UrlShortenerApi.Contracts;
     using UrlShortenerApi.DataAccess.Contracts;
 
     public class CosmosDbUrlShortcutRepository : IUrlShortcutRepository
@@ -17,16 +19,24 @@
             this.configuration = configurationOptions?.Value ?? throw new ArgumentNullException(nameof(configurationOptions));
         }
 
-        public async Task<RepositoryUrlShortcut> GetUrlShortcutAsync(string shortcut)
+        public async Task<Result<UrlShortcut>> GetUrlShortcutAsync(string shortcut)
         {
             Database database = client.GetDatabase(configuration.AzureCosmosDB.DatabaseName);
-
             database = await database.ReadAsync();
-            Console.WriteLine($"Database Id: {database.Id}");
             Container container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
             var response = await container.ReadItemAsync<RepositoryUrlShortcut>(shortcut, new PartitionKey(shortcut));
 
-            return response.Resource;
+            if (response == null || response.Resource == null)
+            {
+                return Result<UrlShortcut>.Failure($"No URL shortcut found for '{shortcut}'.");
+            }
+
+            return Result<UrlShortcut>.Success(
+                new UrlShortcut
+                {
+                    Url = response.Resource.Url,
+                    Shortcut = response.Resource.Id
+                });
         }
     }
 }

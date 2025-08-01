@@ -1,4 +1,5 @@
-﻿using UrlShortenerApi.Contracts;
+﻿using UrlShortenerApi.Common;
+using UrlShortenerApi.Contracts;
 using UrlShortenerApi.DataAccess;
 
 namespace UrlShortenerApi.Services
@@ -11,19 +12,9 @@ namespace UrlShortenerApi.Services
             this.urlShortcutRepository = urlShortcutRepository ?? throw new ArgumentNullException(nameof(urlShortcutRepository));
         }
 
-        public async Task<UrlShortcut> GetUrlShortcutAsync(string shortcut)
+        public async Task<Result<UrlShortcut>> GetUrlShortcutAsync(string shortcut)
         {
-            var repositoryShortcut = await this.urlShortcutRepository.GetUrlShortcutAsync(shortcut);
-            if (repositoryShortcut == null)
-            {
-                throw new NullReferenceException(nameof(repositoryShortcut));
-            }
-
-            return new UrlShortcut
-            { 
-                Url = repositoryShortcut.Url,
-                Shortcut = repositoryShortcut.Id
-            };
+            return await this.urlShortcutRepository.GetUrlShortcutAsync(shortcut);
         }
     }
 }
