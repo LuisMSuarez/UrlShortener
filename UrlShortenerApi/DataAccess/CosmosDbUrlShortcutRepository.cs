@@ -19,14 +19,18 @@
 
         public async Task<RepositoryUrlShortcut> GetUrlShortcutAsync(string shortcut)
         {
-            Database database = client.GetDatabase(configuration.AzureCosmosDB.DatabaseName);
-
-            database = await database.ReadAsync();
-            Console.WriteLine($"Database Id: {database.Id}");
-            Container container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
-            var response = await container.ReadItemAsync<RepositoryUrlShortcut>(shortcut, new PartitionKey(shortcut));
-
-            return response.Resource;
+            try
+            {
+                var database = client.GetDatabase(configuration.AzureCosmosDB.DatabaseName);
+                database = await database.ReadAsync();
+                var container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
+                var response = await container.ReadItemAsync<RepositoryUrlShortcut>(shortcut, new PartitionKey(shortcut));
+                return response.Resource;
+            }
+            catch (Exception ex)
+            {
+                throw new DataAccessException(DataAccessResultCode.InternalServerError, "Error fetching url shortcut", ex);
+            }
         }
     }
 }
