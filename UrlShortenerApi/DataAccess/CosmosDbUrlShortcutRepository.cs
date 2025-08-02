@@ -23,7 +23,6 @@
             {
                 var database = client.GetDatabase(configuration.AzureCosmosDB.DatabaseName);
                 database = await database.ReadAsync();
-                Console.WriteLine($"Database Id: {database.Id}");
                 var container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
                 var response = await container.ReadItemAsync<RepositoryUrlShortcut>(shortcut, new PartitionKey(shortcut));
                 return response.Resource;
