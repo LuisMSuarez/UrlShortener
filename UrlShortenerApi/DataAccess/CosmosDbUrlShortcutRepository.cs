@@ -21,9 +21,9 @@
 
         public async Task<Result<UrlShortcut>> GetUrlShortcutAsync(string shortcut)
         {
-            Database database = client.GetDatabase(configuration.AzureCosmosDB.DatabaseName);
+            var database = client.GetDatabase(configuration.AzureCosmosDB.DatabaseName);
             database = await database.ReadAsync();
-            Container container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
+            var container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
             var response = await container.ReadItemAsync<RepositoryUrlShortcut>(shortcut, new PartitionKey(shortcut));
 
             if (response == null || response.Resource == null)
