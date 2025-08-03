@@ -25,7 +25,6 @@
             try
             {
                 var repositoryShortcut = await this.urlShortcutRepository.GetUrlShortcutAsync(shortcut);
-                Console.WriteLine(this.urlShortcutGenerationService.GenerateUrlShortcut(new UrlShortcut { Shortcut = shortcut, Url = shortcut }));
                 if (repositoryShortcut == null)
                 {
                     throw new NullReferenceException(nameof(repositoryShortcut));
