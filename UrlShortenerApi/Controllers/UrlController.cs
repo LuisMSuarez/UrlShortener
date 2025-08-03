@@ -4,6 +4,7 @@
     using System;
     using UrlShortenerApi.Contracts;
     using UrlShortenerApi.Services;
+    using UrlShortenerApi.Services.Contracts;
 
     [Route("v1/[controller]")]
     [ApiController]
@@ -37,14 +38,20 @@
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var shortcut = Shortcuts.FirstOrDefault(s => string.Equals(s.Shortcut, id, StringComparison.OrdinalIgnoreCase));
-            if (shortcut == null)
+            if (string.IsNullOrWhiteSpace(id))
             {
-                return await Task.FromResult(NotFound());
+                return BadRequest(id);
             }
 
-            return await Task.FromResult(
-                Redirect(shortcut.Url));
+            try
+            {
+                var shortcut = await this.shortcutService.GetUrlShortcutAsync(id);
+                return Redirect(shortcut.Url);
+            }
+            catch (ServiceException ex) when (ex.ResultCode == ServiceResultCode.NotFound)
+            {
+                return NotFound($"Shortcut with id {id} is not found.");
+            }
         }
 
         // POST v1/<UrlController>
