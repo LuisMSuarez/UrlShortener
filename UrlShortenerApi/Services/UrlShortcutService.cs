@@ -8,16 +8,24 @@
     public class UrlShortcutService : IUrlShortcutService
     {
         private readonly IUrlShortcutRepository urlShortcutRepository;
-        public UrlShortcutService(IUrlShortcutRepository urlShortcutRepository)
+        private readonly IUrlShortcutGenerationService urlShortcutGenerationService;
+        public UrlShortcutService(IUrlShortcutRepository urlShortcutRepository, IUrlShortcutGenerationService urlShortcutGenerationService)
         {
             this.urlShortcutRepository = urlShortcutRepository ?? throw new ArgumentNullException(nameof(urlShortcutRepository));
+            this.urlShortcutGenerationService = urlShortcutGenerationService ?? throw new ArgumentNullException(nameof(urlShortcutGenerationService));
         }
 
         public async Task<UrlShortcut> GetUrlShortcutAsync(string shortcut)
         {
+            if (string.IsNullOrWhiteSpace(shortcut))
+            {
+                throw new ServiceException(ServiceResultCode.BadRequest, "Shortcut cannot be null or empty.");
+            }
+
             try
             {
                 var repositoryShortcut = await this.urlShortcutRepository.GetUrlShortcutAsync(shortcut);
+                Console.WriteLine(this.urlShortcutGenerationService.GenerateUrlShortcut(new UrlShortcut { Shortcut = shortcut, Url = shortcut }));
                 if (repositoryShortcut == null)
                 {
                     throw new NullReferenceException(nameof(repositoryShortcut));
