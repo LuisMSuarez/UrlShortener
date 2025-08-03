@@ -2,6 +2,7 @@
 {
     using Microsoft.Azure.Cosmos;
     using Microsoft.Extensions.Options;
+    using System.Net;
     using UrlShortenerApi.DataAccess.Contracts;
 
     public class CosmosDbUrlShortcutRepository : IUrlShortcutRepository
@@ -26,6 +27,10 @@
                 var container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
                 var response = await container.ReadItemAsync<RepositoryUrlShortcut>(shortcut, new PartitionKey(shortcut));
                 return response.Resource;
+            }
+            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new DataAccessException(DataAccessResultCode.NotFound, $"Shortcut with id {shortcut} is not found", ex);
             }
             catch (Exception ex)
             {
