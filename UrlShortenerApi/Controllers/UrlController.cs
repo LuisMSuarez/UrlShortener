@@ -58,14 +58,16 @@
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] UrlShortcut value)
         {
-            var shortcut = Shortcuts.FirstOrDefault(s => string.Equals(s.Shortcut, value.Shortcut, StringComparison.OrdinalIgnoreCase));
-            if (shortcut != null)
+            try
             {
-                return await Task.FromResult(BadRequest());
+                var shortcut = await this.shortcutService.CreateUrlShortcutAsync(value);
+                return Created(shortcut.Shortcut, shortcut);
             }
-
-            Shortcuts.Add(value);
-            return await Task.FromResult(Created());
+            catch (Exception)
+            {
+                // TODO: Catch more specific exceptions
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // PUT v1/<UrlController>/5

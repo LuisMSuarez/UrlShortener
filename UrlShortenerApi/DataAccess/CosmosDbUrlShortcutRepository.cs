@@ -18,6 +18,39 @@
             this.configuration = configurationOptions?.Value ?? throw new ArgumentNullException(nameof(configurationOptions));
         }
 
+        public async Task<RepositoryUrlShortcut> CreateUrlShortcutAsync(string url, string shortcut)
+        {
+            try
+            {
+                var database = client.GetDatabase(configuration.AzureCosmosDB.DatabaseName);
+                database = await database.ReadAsync();
+                var container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
+                Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new RepositoryUrlShortcut
+                {
+                    Id = shortcut,
+                    Url = url,
+                    PartitionKey = shortcut
+                }));
+                var response = await container.CreateItemAsync<RepositoryUrlShortcut>(
+                    new RepositoryUrlShortcut
+                    {
+                        Id = shortcut,
+                        Url = url,
+                        PartitionKey = shortcut
+                    },
+                    partitionKey: new PartitionKey(shortcut));
+                return response.Resource;
+            }
+            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.Conflict)
+            {
+                throw new DataAccessException(DataAccessResultCode.Conflict, $"Shortcut with id {shortcut} already exists", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new DataAccessException(DataAccessResultCode.InternalServerError, "Error fetching url shortcut", ex);
+            }
+        }
+
         public async Task<RepositoryUrlShortcut> GetUrlShortcutAsync(string shortcut)
         {
             try

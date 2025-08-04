@@ -1,16 +1,18 @@
-﻿using System.Text.Json.Serialization;
-
-namespace UrlShortenerApi.DataAccess.Contracts
+﻿namespace UrlShortenerApi.DataAccess.Contracts
 {
+    using Newtonsoft.Json;
+
+    // Important note: CosmosDb uses "Newtonsoft.Json" as its serialization library,
+    // so we need to use the same attributes for serialization/deserialization.
     public class RepositoryUrlShortcut
     {
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         public required string Id { get; set; }
 
-        [JsonPropertyName("partitionKey")]
+        [JsonProperty("partitionKey")]
         public required string PartitionKey { get; set; }
 
-        [JsonPropertyName("url")]
+        [JsonProperty("url")]
         public required string Url { get; set; }
     }
 }
