@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-
-namespace UrlShortenerApi.Contracts
+﻿namespace UrlShortenerApi.Contracts
 {
+    using System.Text.Json.Serialization;
+
     public class UrlShortcut
     {
         [JsonPropertyName("shortcut")]
