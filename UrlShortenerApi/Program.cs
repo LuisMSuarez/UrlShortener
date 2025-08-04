@@ -27,7 +27,7 @@ namespace UrlShortenerApi
 
             builder.Services.AddScoped<IUrlShortcutRepository, CosmosDbUrlShortcutRepository>();
             builder.Services.AddScoped<IUrlShortcutService, UrlShortcutService>();
-
+            builder.Services.AddScoped<IUrlShortcutGenerationService, Sha256UrlShortcutGenerationService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
