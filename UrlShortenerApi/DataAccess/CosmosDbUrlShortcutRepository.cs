@@ -25,12 +25,6 @@
                 var database = client.GetDatabase(configuration.AzureCosmosDB.DatabaseName);
                 database = await database.ReadAsync();
                 var container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
-                Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new RepositoryUrlShortcut
-                {
-                    Id = shortcut,
-                    Url = url,
-                    PartitionKey = shortcut
-                }));
                 var response = await container.CreateItemAsync<RepositoryUrlShortcut>(
                     new RepositoryUrlShortcut
                     {
