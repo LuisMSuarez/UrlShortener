@@ -43,7 +43,7 @@
 
             try
             {
-                var repositoryShortcut = await this.urlShortcutRepository.GetUrlShortcutAsync(shortcut);
+                var repositoryShortcut = await this.urlShortcutRepository.GetShortcutAsync(shortcut);
                 if (repositoryShortcut == null)
                 {
                     throw new NullReferenceException(nameof(repositoryShortcut));
@@ -89,9 +89,12 @@
                 });
             try
             {
-                var createdShortcut= await this.urlShortcutRepository.CreateUrlShortcutAsync(
-                    shortcut.Url,
-                    newShortcutId);
+                var createdShortcut= await this.urlShortcutRepository.CreateShortcutAsync(
+                    new RepositoryUrlShortcut 
+                    {
+                        Id = newShortcutId,
+                        Url = shortcut.Url
+                    });
                 return ToServiceUrlShortcut(createdShortcut);
             }
             catch (DataAccessException ex) when (ex.ResultCode == DataAccessResultCode.Conflict)
@@ -104,7 +107,7 @@
                 logger.Log(LogLevel.Warning, $"RetryShortcutCreationConflict: A shortcut with the same key {newShortcutId} already exists. Retries left {retriesLeft}");
                 
                 // TODO: handle case where below line throws not found exception
-                var conflictingShortcut = await this.urlShortcutRepository.GetUrlShortcutAsync(newShortcutId);
+                var conflictingShortcut = await this.urlShortcutRepository.GetShortcutAsync(newShortcutId);
                 if (conflictingShortcut.Url == shortcut.Url)
                 {
                     // If the URL also, matches, we return the existing shortcut

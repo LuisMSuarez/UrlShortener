@@ -18,7 +18,7 @@
             this.configuration = configurationOptions?.Value ?? throw new ArgumentNullException(nameof(configurationOptions));
         }
 
-        public async Task<RepositoryUrlShortcut> CreateUrlShortcutAsync(string url, string shortcut)
+        public async Task<RepositoryUrlShortcut> CreateShortcutAsync(RepositoryUrlShortcut shortcut)
         {
             try
             {
@@ -28,11 +28,11 @@
                 var response = await container.CreateItemAsync<CosmosDbUrlShortcut>(
                     new CosmosDbUrlShortcut
                     {
-                        Id = shortcut,
-                        Url = url,
-                        PartitionKey = shortcut
+                        Id = shortcut.Id,
+                        Url = shortcut.Url,
+                        PartitionKey = shortcut.Id
                     },
-                    partitionKey: new PartitionKey(shortcut));
+                    partitionKey: new PartitionKey(shortcut.Id));
 
                 return ToRepositoryUrlShortcut(response.Resource);
             }
@@ -46,7 +46,7 @@
             }
         }
 
-        public async Task<RepositoryUrlShortcut> GetUrlShortcutAsync(string shortcut)
+        public async Task<RepositoryUrlShortcut> GetShortcutAsync(string shortcut)
         {
             try
             {
