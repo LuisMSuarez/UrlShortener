@@ -10,7 +10,7 @@
         private const string Base62Chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         private const int MaxShortcutLength = 6;
 
-        public string GenerateUrlShortcut(UrlShortcut urlShortcut)
+        public string GenerateUrlShortcutId(UrlShortcut urlShortcut)
         {
             // A shared SHA256 instance is not thread safe. Better to create one per request
             using SHA256 sha256 = SHA256.Create();

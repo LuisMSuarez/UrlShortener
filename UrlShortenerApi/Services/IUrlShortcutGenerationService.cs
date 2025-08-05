@@ -4,6 +4,6 @@ namespace UrlShortenerApi.Services
 {
     public interface IUrlShortcutGenerationService
     {
-        string GenerateUrlShortcut(UrlShortcut urlShortcut);
+        string GenerateUrlShortcutId(UrlShortcut urlShortcut);
     }
 }
