@@ -25,15 +25,16 @@
                 var database = client.GetDatabase(configuration.AzureCosmosDB.DatabaseName);
                 database = await database.ReadAsync();
                 var container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
-                var response = await container.CreateItemAsync<RepositoryUrlShortcut>(
-                    new RepositoryUrlShortcut
+                var response = await container.CreateItemAsync<CosmosDbUrlShortcut>(
+                    new CosmosDbUrlShortcut
                     {
                         Id = shortcut,
                         Url = url,
                         PartitionKey = shortcut
                     },
                     partitionKey: new PartitionKey(shortcut));
-                return response.Resource;
+
+                return ToRepositoryUrlShortcut(response.Resource);
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.Conflict)
             {
@@ -52,8 +53,8 @@
                 var database = client.GetDatabase(configuration.AzureCosmosDB.DatabaseName);
                 database = await database.ReadAsync();
                 var container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
-                var response = await container.ReadItemAsync<RepositoryUrlShortcut>(shortcut, new PartitionKey(shortcut));
-                return response.Resource;
+                var response = await container.ReadItemAsync<CosmosDbUrlShortcut>(shortcut, new PartitionKey(shortcut));
+                return ToRepositoryUrlShortcut(response.Resource);
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
@@ -63,6 +64,15 @@
             {
                 throw new DataAccessException(DataAccessResultCode.InternalServerError, "Error fetching url shortcut", ex);
             }
+        }
+
+        private static RepositoryUrlShortcut ToRepositoryUrlShortcut(CosmosDbUrlShortcut cosmosDbUrlShortcut)
+        {
+            return new RepositoryUrlShortcut
+            {
+                Id = cosmosDbUrlShortcut.Id,
+                Url = cosmosDbUrlShortcut.Url
+            };
         }
     }
 }
