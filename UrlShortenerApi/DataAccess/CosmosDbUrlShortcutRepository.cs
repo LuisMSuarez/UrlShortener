@@ -9,6 +9,7 @@
     {
         private readonly CosmosClient client;
         private readonly Configuration configuration;
+        private readonly Container container;
 
         public CosmosDbUrlShortcutRepository(
             CosmosClient client,
@@ -16,15 +17,16 @@
         {
             this.client = client ?? throw new ArgumentNullException(nameof(client));
             this.configuration = configurationOptions?.Value ?? throw new ArgumentNullException(nameof(configurationOptions));
+            var database = client.GetDatabase(configuration.AzureCosmosDB.DatabaseName);
+            this.container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
+
         }
 
         public async Task<RepositoryUrlShortcut> CreateShortcutAsync(RepositoryUrlShortcut shortcut)
         {
             try
             {
-                var database = client.GetDatabase(configuration.AzureCosmosDB.DatabaseName);
-                var container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
-                var response = await container.CreateItemAsync<CosmosDbUrlShortcut>(
+                var response = await this.container.CreateItemAsync<CosmosDbUrlShortcut>(
                     new CosmosDbUrlShortcut
                     {
                         Id = shortcut.Id,
@@ -49,9 +51,7 @@
         {
             try
             {
-                var database = client.GetDatabase(configuration.AzureCosmosDB.DatabaseName);
-                var container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
-                var response = await container.ReadItemAsync<CosmosDbUrlShortcut>(shortcut, new PartitionKey(shortcut));
+                var response = await this.container.ReadItemAsync<CosmosDbUrlShortcut>(shortcut, new PartitionKey(shortcut));
                 return ToRepositoryUrlShortcut(response.Resource);
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
@@ -66,14 +66,11 @@
 
         public async Task<IEnumerable<RepositoryUrlShortcut>> GetUrlShortcutByUrlAsync(string url)
         {
-            var database = client.GetDatabase(configuration.AzureCosmosDB.DatabaseName);
-            var container = database.GetContainer(configuration.AzureCosmosDB.ContainerName);
-
             var query = new QueryDefinition("SELECT * FROM c WHERE c.url = @url")
                 .WithParameter("@url", url);
 
             var results = new List<RepositoryUrlShortcut>();
-            using var iterator = container.GetItemQueryIterator<CosmosDbUrlShortcut>(query);
+            using var iterator = this.container.GetItemQueryIterator<CosmosDbUrlShortcut>(query);
             while (iterator.HasMoreResults)
             {
                 foreach (var item in await iterator.ReadNextAsync())
