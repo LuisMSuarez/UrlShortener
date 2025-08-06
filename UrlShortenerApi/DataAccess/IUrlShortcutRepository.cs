@@ -4,7 +4,7 @@
 
     public interface IUrlShortcutRepository
     {
-        Task<RepositoryUrlShortcut> GetUrlShortcutAsync(string shortcutId);
-        Task<RepositoryUrlShortcut> CreateUrlShortcutAsync(string url, string shortcut);
+        Task<RepositoryUrlShortcut> GetShortcutAsync(string shortcutId);
+        Task<RepositoryUrlShortcut> CreateShortcutAsync(RepositoryUrlShortcut shortcut);
     }
 }

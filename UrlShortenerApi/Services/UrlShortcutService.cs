@@ -43,7 +43,7 @@
 
             try
             {
-                var repositoryShortcut = await this.urlShortcutRepository.GetUrlShortcutAsync(shortcut);
+                var repositoryShortcut = await this.urlShortcutRepository.GetShortcutAsync(shortcut);
                 if (repositoryShortcut == null)
                 {
                     throw new NullReferenceException(nameof(repositoryShortcut));
@@ -85,14 +85,16 @@
             var newShortcutId = this.urlShortcutGenerationService.GenerateUrlShortcutId(
                 new UrlShortcut
                 {
-                    Shortcut = string.Concat(salt, shortcut.Url),
-                    Url = shortcut.Url
+                    Url = string.Concat(salt, shortcut.Url)
                 });
             try
             {
-                var createdShortcut= await this.urlShortcutRepository.CreateUrlShortcutAsync(
-                    shortcut.Url,
-                    newShortcutId);
+                var createdShortcut= await this.urlShortcutRepository.CreateShortcutAsync(
+                    new RepositoryUrlShortcut 
+                    {
+                        Id = newShortcutId,
+                        Url = shortcut.Url
+                    });
                 return ToServiceUrlShortcut(createdShortcut);
             }
             catch (DataAccessException ex) when (ex.ResultCode == DataAccessResultCode.Conflict)
@@ -103,7 +105,9 @@
                 // 2. The URL is different (collision).  In this case, we attempt to resolve the collision
 
                 logger.Log(LogLevel.Warning, $"RetryShortcutCreationConflict: A shortcut with the same key {newShortcutId} already exists. Retries left {retriesLeft}");
-                var conflictingShortcut = await this.urlShortcutRepository.GetUrlShortcutAsync(shortcut.Shortcut);
+                
+                // TODO: handle case where below line throws not found exception
+                var conflictingShortcut = await this.urlShortcutRepository.GetShortcutAsync(newShortcutId);
                 if (conflictingShortcut.Url == shortcut.Url)
                 {
                     // If the URL also, matches, we return the existing shortcut
