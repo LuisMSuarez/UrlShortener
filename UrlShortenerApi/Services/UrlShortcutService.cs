@@ -1,5 +1,6 @@
 ﻿namespace UrlShortenerApi.Services
 {
+    using System.Collections.Generic;
     using System.Security.Policy;
     using UrlShortenerApi.Contracts;
     using UrlShortenerApi.DataAccess;
@@ -61,6 +62,11 @@
             }
         }
 
+        public Task<IEnumerable<UrlShortcut>> GetUrlShortcutsByUrlAsync(string url)
+        {
+            throw new NotImplementedException();
+        }
+
         private static UrlShortcut ToServiceUrlShortcut(RepositoryUrlShortcut repositoryUrlShortcut)
         {
             return new UrlShortcut
@@ -108,7 +114,7 @@
                 
                 // TODO: handle case where below line throws not found exception
                 var conflictingShortcut = await this.urlShortcutRepository.GetShortcutAsync(newShortcutId);
-                if (conflictingShortcut.Url == shortcut.Url)
+                if (conflictingShortcut != null && string.Equals(conflictingShortcut.Url, shortcut.Url, StringComparison.OrdinalIgnoreCase))
                 {
                     // If the URL also, matches, we return the existing shortcut
                     // Returning a conflict to the caller would not be helpful in this case

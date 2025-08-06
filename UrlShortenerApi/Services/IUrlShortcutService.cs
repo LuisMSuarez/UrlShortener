@@ -1,4 +1,5 @@
 ﻿using UrlShortenerApi.Contracts;
+using UrlShortenerApi.DataAccess.Contracts;
 
 namespace UrlShortenerApi.Services
 {
@@ -6,5 +7,6 @@ namespace UrlShortenerApi.Services
     {
         Task<UrlShortcut> GetUrlShortcutAsync(string shortcut);
         Task<UrlShortcut> CreateUrlShortcutAsync(UrlShortcut shortcut);
+        Task<IEnumerable<UrlShortcut>> GetUrlShortcutsByUrlAsync(string url);
     }
 }

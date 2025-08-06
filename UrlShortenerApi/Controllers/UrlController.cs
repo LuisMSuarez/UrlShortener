@@ -16,24 +16,6 @@
             this.shortcutService = shortcutService ?? throw new ArgumentNullException(nameof(shortcutService));
         }
 
-        public static IList<UrlShortcut> Shortcuts { get; set; } = new List<UrlShortcut>
-        {
-            new UrlShortcut
-            {
-                Shortcut = "xyz",
-                Url = "https://gamershub.azurewebsites.net"
-            }
-        };
-
-        // GET: v1/<UrlController>
-        [HttpGet]
-        public async Task<IEnumerable<UrlShortcut>> Get()
-        {
-            var shortcut = await this.shortcutService.GetUrlShortcutAsync("xyz");
-            Console.Write(shortcut);
-            return Shortcuts;
-        }
-
         // GET v1/<UrlController>/xyz
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
@@ -51,6 +33,26 @@
             catch (ServiceException ex) when (ex.ResultCode == ServiceResultCode.NotFound)
             {
                 return NotFound($"Shortcut with id {id} is not found.");
+            }
+        }
+
+        // GET: v1/<UrlController>?url=<url>
+        [HttpGet]
+        public async Task<IActionResult> GetByUrl([FromQuery] string? url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return BadRequest(url);
+            }
+
+            try
+            {
+                var shortcuts = await shortcutService.GetUrlShortcutsByUrlAsync(url);
+                return Ok(shortcuts);
+            }
+            catch (ServiceException ex) when (ex.ResultCode == ServiceResultCode.NotFound)
+            {
+                return NotFound($"Shortcut for url '{url}' not found.");
             }
         }
 
@@ -79,29 +81,14 @@
                 return await Task.FromResult(BadRequest());
             }
 
-            var shortcut = Shortcuts.FirstOrDefault(s => string.Equals(s.Shortcut, id, StringComparison.OrdinalIgnoreCase));
-            if (shortcut == null)
-            {
-                return await Task.FromResult(NotFound());
-            }
-
-            Shortcuts.Remove(shortcut);
-            Shortcuts.Add(value);
-            return await Task.FromResult(Ok());
+            throw new NotImplementedException();
         }
 
         // DELETE v1/<UrlController>/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public Task<IActionResult> Delete(string id)
         {
-            var shortcut = Shortcuts.FirstOrDefault(s => string.Equals(s.Shortcut, id, StringComparison.OrdinalIgnoreCase));
-            if (shortcut == null)
-            {
-                return await Task.FromResult(NotFound());
-            }
-
-            Shortcuts.Remove(shortcut);
-            return await Task.FromResult(Ok());
+            throw new NotImplementedException();
         }
     }
 }
