@@ -6,6 +6,6 @@
     {
         Task<RepositoryUrlShortcut?> GetShortcutAsync(string shortcutId);
         Task<RepositoryUrlShortcut> CreateShortcutAsync(RepositoryUrlShortcut shortcut);
-        Task<IEnumerable<RepositoryUrlShortcut>> GetUrlShortcutByUrlAsync(string url);
+        Task<IEnumerable<RepositoryUrlShortcut>> GetUrlShortcutsByUrlAsync(string url);
     }
 }
