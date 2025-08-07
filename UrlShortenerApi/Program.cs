@@ -25,7 +25,8 @@ namespace UrlShortenerApi
                 return client;
             });
 
-            builder.Services.AddScoped<IUrlShortcutRepository, CosmosDbUrlShortcutRepository>();
+            // Registering the repository as singleton for better performance, provided this is safe for CosmosDb
+            builder.Services.AddSingleton<IUrlShortcutRepository, CosmosDbUrlShortcutRepository>();
             builder.Services.AddScoped<IUrlShortcutService, UrlShortcutService>();
             builder.Services.AddScoped<IUrlShortcutGenerationService, Sha256UrlShortcutGenerationService>();
 
