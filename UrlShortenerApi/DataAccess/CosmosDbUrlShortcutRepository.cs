@@ -24,6 +24,11 @@
 
         public async Task<RepositoryUrlShortcut> CreateShortcutAsync(RepositoryUrlShortcut shortcut)
         {
+            if (shortcut == null || string.IsNullOrWhiteSpace(shortcut.Url))
+            {
+                throw new DataAccessException(DataAccessResultCode.BadRequest, "Shortcut is null or contains empty url.");
+            }
+
             try
             {
                 var response = await this.container.CreateItemAsync<CosmosDbUrlShortcut>(
@@ -43,12 +48,17 @@
             }
             catch (Exception ex)
             {
-                throw new DataAccessException(DataAccessResultCode.InternalServerError, "Error fetching url shortcut", ex);
+                throw new DataAccessException(DataAccessResultCode.InternalServerError, "Error fetching url shortcut.", ex);
             }
         }
 
         public async Task<RepositoryUrlShortcut?> GetShortcutAsync(string shortcut)
         {
+            if (string.IsNullOrWhiteSpace(shortcut))
+            {
+                throw new DataAccessException(DataAccessResultCode.BadRequest, "Shortcut is null or empty url.");
+            }
+
             try
             {
                 var response = await this.container.ReadItemAsync<CosmosDbUrlShortcut>(shortcut, new PartitionKey(shortcut));
@@ -60,12 +70,20 @@
             }
             catch (Exception ex)
             {
-                throw new DataAccessException(DataAccessResultCode.InternalServerError, "Error fetching url shortcut", ex);
+                throw new DataAccessException(DataAccessResultCode.InternalServerError, "Error fetching url shortcut.", ex);
             }
         }
 
-        public async Task<IEnumerable<RepositoryUrlShortcut>> GetUrlShortcutByUrlAsync(string url)
+        public async Task<IEnumerable<RepositoryUrlShortcut>> GetUrlShortcutsByUrlAsync(string url)
         {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                throw new DataAccessException(DataAccessResultCode.BadRequest, "Url is null or empty.");
+            }
+
+            // Note: Below is a cross-partition query that can be optimized
+            // by creating a separate collection for the reverse lookup where url is the partition key
+            // for now this is mitigated by indexing the url field.
             var query = new QueryDefinition("SELECT * FROM c WHERE c.url = @url")
                 .WithParameter("@url", url);
 

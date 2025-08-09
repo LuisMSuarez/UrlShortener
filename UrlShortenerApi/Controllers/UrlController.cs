@@ -28,11 +28,16 @@
             try
             {
                 var shortcut = await this.shortcutService.GetUrlShortcutAsync(id);
+                if (shortcut == null)
+                {
+                    return NotFound($"Shortcut with id {id} is not found.");
+                }
+
                 return Redirect(shortcut.Url);
             }
-            catch (ServiceException ex) when (ex.ResultCode == ServiceResultCode.NotFound)
+            catch (ServiceException ex) when (ex.ResultCode == ServiceResultCode.InternalServerError)
             {
-                return NotFound($"Shortcut with id {id} is not found.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -50,9 +55,9 @@
                 var shortcuts = await shortcutService.GetUrlShortcutsByUrlAsync(url);
                 return Ok(shortcuts);
             }
-            catch (ServiceException ex) when (ex.ResultCode == ServiceResultCode.NotFound)
+            catch (ServiceException ex) when (ex.ResultCode == ServiceResultCode.InternalServerError)
             {
-                return NotFound($"Shortcut for url '{url}' not found.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 

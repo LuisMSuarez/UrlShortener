@@ -1,11 +1,11 @@
 ﻿namespace UrlShortenerApi.Services
 {
     using System.Collections.Generic;
-    using System.Security.Policy;
     using UrlShortenerApi.Contracts;
     using UrlShortenerApi.DataAccess;
     using UrlShortenerApi.DataAccess.Contracts;
     using UrlShortenerApi.Services.Contracts;
+    using System.Linq;
 
     public class UrlShortcutService : IUrlShortcutService
     {
@@ -35,7 +35,7 @@
             return await this.RetriableShortcutCreation(MaxRetriesConflictResolution, string.Empty, shortcut);
         }
 
-        public async Task<UrlShortcut> GetUrlShortcutAsync(string shortcut)
+        public async Task<UrlShortcut?> GetUrlShortcutAsync(string shortcut)
         {
             if (string.IsNullOrWhiteSpace(shortcut))
             {
@@ -47,14 +47,10 @@
                 var repositoryShortcut = await this.urlShortcutRepository.GetShortcutAsync(shortcut);
                 if (repositoryShortcut == null)
                 {
-                    throw new NullReferenceException(nameof(repositoryShortcut));
+                    return null;
                 }
 
                 return ToServiceUrlShortcut(repositoryShortcut);
-            }
-            catch (DataAccessException ex) when (ex.ResultCode == DataAccessResultCode.NotFound)
-            {
-                throw new ServiceException(ServiceResultCode.NotFound, $"Shortcut with id {shortcut} is not found.", ex);
             }
             catch (Exception ex)
             {
@@ -62,9 +58,27 @@
             }
         }
 
-        public Task<IEnumerable<UrlShortcut>> GetUrlShortcutsByUrlAsync(string url)
+        public async Task<IEnumerable<UrlShortcut>> GetUrlShortcutsByUrlAsync(string url)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                throw new ServiceException(ServiceResultCode.BadRequest, "Url cannot be null or empty.");
+            }
+
+            var normalizedUrl = url.ToLowerInvariant();
+            try
+            {
+                var shortcuts = await this.urlShortcutRepository.GetUrlShortcutsByUrlAsync(normalizedUrl);
+                if (shortcuts == null)
+                {
+                    return [];
+                }
+                return shortcuts.Select(repoShortcut => ToServiceUrlShortcut(repoShortcut));
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(ServiceResultCode.InternalServerError, $"An unexpected error occurred while fetching the URL shortcut by Url {url}.", ex);
+            }
         }
 
         private static UrlShortcut ToServiceUrlShortcut(RepositoryUrlShortcut repositoryUrlShortcut)
