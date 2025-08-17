@@ -5,7 +5,6 @@
     using UrlShortenerApi.DataAccess;
     using UrlShortenerApi.DataAccess.Contracts;
     using UrlShortenerApi.Services.Contracts;
-    using System.Linq;
 
     public class UrlShortcutService : IUrlShortcutService
     {
