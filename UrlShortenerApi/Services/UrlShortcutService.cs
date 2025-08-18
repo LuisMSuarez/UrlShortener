@@ -26,7 +26,7 @@
 
         public async Task<UrlShortcut> CreateUrlShortcutAsync(UrlShortcut shortcut)
         {
-            if (string.IsNullOrWhiteSpace(shortcut.Url))
+            if (shortcut == null ||  string.IsNullOrWhiteSpace(shortcut.Url))
             {
                 throw new ServiceException(ServiceResultCode.BadRequest, "Shortcut cannot be null or empty.");
             }
