@@ -37,7 +37,7 @@
             }
             catch (ServiceException ex) when (ex.ResultCode == ServiceResultCode.InternalServerError)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -55,9 +55,13 @@
                 var shortcuts = await shortcutService.GetUrlShortcutsByUrlAsync(url);
                 return Ok(shortcuts);
             }
+            catch (ServiceException ex) when (ex.ResultCode == ServiceResultCode.BadRequest)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (ServiceException ex) when (ex.ResultCode == ServiceResultCode.InternalServerError)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
