@@ -60,8 +60,13 @@
                 return await Task.FromResult(cachedShortcut);
             }
 
+            var result = await this.innerService.GetUrlShortcutAsync(shortcut);
+            if (result != null)
+            {
+                this.shortcutCache.Set(shortcut, result, TimeSpan.FromDays(1));
+            }
             this.logger.LogInformation("Cache miss for GetUrlShortcutAsync with shortcut: {shortcut}", shortcut);
-            return await this.innerService.GetUrlShortcutAsync(shortcut);
+            return result;
         }
 
         public async Task<IEnumerable<UrlShortcut>> GetUrlShortcutsByUrlAsync(string url)
