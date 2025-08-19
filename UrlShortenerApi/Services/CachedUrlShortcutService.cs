@@ -1,6 +1,5 @@
 ﻿namespace UrlShortenerApi.Services
 {
-    using System.ClientModel;
     using UrlShortenerApi.Contracts;
     using UrlShortenerApi.Services.Contracts;
     using UrlShortenerApi.Utils;
@@ -65,9 +64,18 @@
             return await this.innerService.GetUrlShortcutAsync(shortcut);
         }
 
-        public Task<IEnumerable<UrlShortcut>> GetUrlShortcutsByUrlAsync(string url)
+        public async Task<IEnumerable<UrlShortcut>> GetUrlShortcutsByUrlAsync(string url)
         {
-            throw new NotImplementedException();
+            // Reverse lookup is a less common scenario
+            // We choose not to optimize this and instead call the inner service
+            // This can always be changed later by adding a cache for reverse lookup.
+
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                throw new ServiceException(ServiceResultCode.BadRequest, "Url cannot be null or empty.");
+            }
+
+            return await this.innerService.GetUrlShortcutsByUrlAsync(url);
         }
     }
 }
