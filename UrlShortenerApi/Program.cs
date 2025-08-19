@@ -30,6 +30,24 @@ namespace UrlShortenerApi
             builder.Services.AddScoped<IUrlShortcutService, UrlShortcutService>();
             builder.Services.AddScoped<IUrlShortcutGenerationService, Sha256UrlShortcutGenerationService>();
 
+            // Register IUrlShortcutService factory to enable creation of instances of UrlShortcutService and CachedUrlShortcutService based on the key provided.
+            // This allows for easy switching between different implementations of IUrlShortcutService.
+            // For this to work, we must also register the concrete implementations so they can be resolved by the factory.
+            builder.Services.AddScoped<CachedUrlShortcutService>();
+            builder.Services.AddScoped<UrlShortcutService>();
+            builder.Services.AddSingleton<Func<string, IUrlShortcutService>>(serviceProvider =>
+            {
+                return key =>
+                {
+                    return key switch
+                    {
+                        "Base" => serviceProvider.GetService<UrlShortcutService>() ?? throw new InvalidOperationException("Service of type UrlShortcutService is not registered."),
+                        "Cached" => serviceProvider.GetService<CachedUrlShortcutService>() ?? throw new InvalidOperationException("Service of type CachedUrlShortcutService is not registered."),
+                        _ => throw new ArgumentException("Invalid IUrlShortcutService type")
+                    };
+                };
+            });
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
