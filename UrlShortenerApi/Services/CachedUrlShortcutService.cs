@@ -30,7 +30,7 @@
             {
                 throw new ArgumentNullException(nameof(shortcutServiceFactory));
             }
-            
+
             this.innerService = shortcutServiceFactory("Base") ?? throw new ArgumentNullException(nameof(shortcutServiceFactory));
         }
 

@@ -2,8 +2,10 @@ namespace UrlShortenerApi
 {
     using Microsoft.Azure.Cosmos;
     using Microsoft.Extensions.Options;
+    using UrlShortenerApi.Contracts;
     using UrlShortenerApi.DataAccess;
     using UrlShortenerApi.Services;
+    using UrlShortenerApi.Utils;
 
     public class Program
     {
@@ -27,15 +29,25 @@ namespace UrlShortenerApi
 
             // Registering the repository as singleton for better performance, provided this is safe for CosmosDb
             builder.Services.AddSingleton<IUrlShortcutRepository, CosmosDbUrlShortcutRepository>();
-            builder.Services.AddScoped<IUrlShortcutService, UrlShortcutService>();
             builder.Services.AddScoped<IUrlShortcutGenerationService, Sha256UrlShortcutGenerationService>();
+
+            // Register LRU cache as a singleton service so it can be shared across requests.
+            builder.Services.AddSingleton<ILruCache<string, UrlShortcut>>((serviceProvider) =>
+            {
+                // Create an LRU cache with a capacity of 1000 items.
+                // This cache will be used to store recently accessed URL shortcuts for quick retrieval.
+                return new LruCache<string, UrlShortcut>(1000);
+            });
+
+            // Register CachedUrlShortcutService as default implementation of the interface
+            builder.Services.AddScoped<IUrlShortcutService, CachedUrlShortcutService>();
 
             // Register IUrlShortcutService factory to enable creation of instances of UrlShortcutService and CachedUrlShortcutService based on the key provided.
             // This allows for easy switching between different implementations of IUrlShortcutService.
             // For this to work, we must also register the concrete implementations so they can be resolved by the factory.
-            builder.Services.AddScoped<CachedUrlShortcutService>();
             builder.Services.AddScoped<UrlShortcutService>();
-            builder.Services.AddSingleton<Func<string, IUrlShortcutService>>(serviceProvider =>
+            builder.Services.AddScoped<CachedUrlShortcutService>();
+            builder.Services.AddScoped<Func<string, IUrlShortcutService>>(serviceProvider =>
             {
                 return key =>
                 {
