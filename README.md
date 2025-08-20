@@ -6,6 +6,10 @@ URL shortcut API set with the following main features:
 - Retrieve (redirect) to original url given shortened url
 - Stateless API (for easy scalability)
 - Usage of dependency injection pattern
+- In-memory LRU cache of most requested shortcuts
+
+<img width="2720" height="1285" alt="UrlShortener" src="https://github.com/user-attachments/assets/04eb702d-9d3b-4003-802e-38b6bbb20391" />
+
 
 Under the hood, the API uses a Sha 256 Hash + Base 62 encoding scheme to produce URLs that are 6 characters long.
 This can produce 62^6 unique shorctuts or 56,800,235,584 (approx 57 Billion).
