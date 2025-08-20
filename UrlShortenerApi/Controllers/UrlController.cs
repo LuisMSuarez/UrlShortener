@@ -1,5 +1,6 @@
 ﻿namespace UrlShortenerApi.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System;
     using UrlShortenerApi.Contracts;
@@ -39,6 +40,19 @@
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
+        }
+
+        // GET /{shortcut}
+        // This method will respond to requests like GET https://.../XYZ and redirect to the shortcut URL.
+        // This route is absolute and will not be affected by the controller's[Route("v1/[controller]")] prefix.
+        // It is provided for convenience to allow direct access to shortcuts without needing the full API path,
+        // therefore truly providing a shortened URL experience.
+        // However, it is important to note that this route will not support versioning, if the contract changes,
+        // callers may see changes in the response or behavior.
+        [HttpGet("/{shortcut}")]
+        public async Task<IActionResult> RedirectByShortcut([FromRoute] string shortcut)
+        {
+            return await Get(shortcut);
         }
 
         // GET: v1/<UrlController>?url=<url>
