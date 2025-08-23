@@ -3,3 +3,5 @@
 /UrlShortenerApi/bin
 /UrlShortenerApi/obj
 UrlShortenerApi/appsettings.json
+/UrlShortener.Utils/bin
+/UrlShortener.Utils/obj
