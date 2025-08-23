@@ -4,7 +4,7 @@
 
     // Important note: CosmosDb uses "Newtonsoft.Json" as its serialization library,
     // so we need to use the same attributes for serialization/deserialization.
-    public class CosmosDbUrlShortcut
+    internal class CosmosDbUrlShortcut
     {
         [JsonProperty("id")]
         public required string Id { get; set; }
