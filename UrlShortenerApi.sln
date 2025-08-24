@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36310.24
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlShortenerApi", "UrlShortenerApi.csproj", "{17B82423-CE62-483D-AD49-5E7F39B17902}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlShortenerApi", "UrlShortenerApi\UrlShortenerApi.csproj", "{17B82423-CE62-483D-AD49-5E7F39B17902}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlShortener.Utils", "..\UrlShortener.Utils\UrlShortener.Utils.csproj", "{1D51AB52-0FC5-4058-87B7-E4860C372815}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlShortener.Utils", "UrlShortener.Utils\UrlShortener.Utils.csproj", "{1D51AB52-0FC5-4058-87B7-E4860C372815}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlShortener.DataAccess", "..\UrlShortener.DataAccess\UrlShortener.DataAccess.csproj", "{73D48189-184C-477F-9287-3AA285A2C1B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlShortener.DataAccess", "UrlShortener.DataAccess\UrlShortener.DataAccess.csproj", "{73D48189-184C-477F-9287-3AA285A2C1B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
