@@ -1,4 +1,4 @@
-﻿namespace UrlShortenerApi.Contracts
+﻿namespace UrlShortenerApi.Services.Contracts
 {
     using System.Text.Json.Serialization;
 

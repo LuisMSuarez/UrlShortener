@@ -1,6 +1,6 @@
 ﻿namespace UrlShortenerApi.Services
 {
-    using UrlShortenerApi.Contracts;
+    using UrlShortenerApi.Services.Contracts;
 
     public interface IUrlShortcutService
     {

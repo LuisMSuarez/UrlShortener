@@ -2,10 +2,9 @@
 {
     using Microsoft.Extensions.Logging;
     using System.Collections.Generic;
-    using UrlShortenerApi.Contracts;
+    using UrlShortenerApi.Services.Contracts;
     using UrlShortenerApi.DataAccess;
     using UrlShortenerApi.DataAccess.Contracts;
-    using UrlShortenerApi.Services.Contracts;
 
     public class UrlShortcutService : IUrlShortcutService
     {
