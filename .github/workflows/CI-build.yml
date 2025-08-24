@@ -76,7 +76,7 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     - name: Build
-      run: dotnet build --configuration ${{matrix.configuration}}
+      run: dotnet build ${{ env.Solution_Name }} --configuration ${{matrix.configuration}}
     
     # Execute all unit tests in the solution
     #- name: Test with the dotnet CLI
