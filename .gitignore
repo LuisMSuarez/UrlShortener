@@ -7,3 +7,4 @@ UrlShortenerApi/appsettings.json
 /UrlShortener.Utils/obj
 /UrlShortener.DataAccess/obj
 /UrlShortener.DataAccess/bin
+/.vs
