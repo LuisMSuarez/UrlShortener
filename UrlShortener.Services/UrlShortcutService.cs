@@ -1,5 +1,6 @@
 ﻿namespace UrlShortenerApi.Services
 {
+    using Microsoft.Extensions.Logging;
     using System.Collections.Generic;
     using UrlShortenerApi.Contracts;
     using UrlShortenerApi.DataAccess;
