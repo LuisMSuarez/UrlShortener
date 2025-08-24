@@ -2,9 +2,9 @@ namespace UrlShortenerApi
 {
     using Microsoft.Azure.Cosmos;
     using Microsoft.Extensions.Options;
-    using UrlShortenerApi.Contracts;
     using UrlShortenerApi.DataAccess;
     using UrlShortenerApi.Services;
+    using UrlShortenerApi.Services.Contracts;
     using UrlShortenerApi.Utils;
 
     public class Program
