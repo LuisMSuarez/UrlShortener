@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UrlShortener.Services\UrlShortener.Services.csproj" />
+    <ProjectReference Include="..\UrlShortener.Services\UrlShortenerApi.Services.csproj" />
   </ItemGroup>
 
 </Project>
