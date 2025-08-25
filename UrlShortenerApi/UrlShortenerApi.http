@@ -1,6 +1,6 @@
 @UrlShortenerApi_HostAddress = https://localhost:7169
 
-GET https://localhost:7169/v1/urls/2AqlHL
+GET {{UrlShortenerApi_HostAddress}}/v1/urls/2AqlHL
 Accept: application/json
 
 ###
