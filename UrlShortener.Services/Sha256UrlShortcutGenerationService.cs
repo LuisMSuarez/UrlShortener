@@ -3,7 +3,7 @@
     using System.Numerics;
     using System.Security.Cryptography;
     using System.Text;
-    using UrlShortenerApi.Contracts;
+    using UrlShortenerApi.Services.Contracts;
 
     public class Sha256UrlShortcutGenerationService : IUrlShortcutGenerationService
     {

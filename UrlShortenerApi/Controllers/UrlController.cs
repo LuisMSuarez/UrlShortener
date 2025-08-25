@@ -1,9 +1,7 @@
 ﻿namespace UrlShortenerApi.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System;
-    using UrlShortenerApi.Contracts;
     using UrlShortenerApi.Services;
     using UrlShortenerApi.Services.Contracts;
 
