@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UrlShortener.DataAccess\UrlShortener.DataAccess.csproj" />
-    <ProjectReference Include="..\UrlShortener.Utils\UrlShortener.Utils.csproj" />
+    <ProjectReference Include="..\UrlShortener.DataAccess\UrlShortenerApi.DataAccess.csproj" />
+    <ProjectReference Include="..\UrlShortener.Utils\UrlShortenerApi.Utils.csproj" />
   </ItemGroup>
 
 </Project>
