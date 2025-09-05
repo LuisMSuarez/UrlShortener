@@ -12,3 +12,4 @@ UrlShortenerApi/appsettings.json
 /UrlShortener.Services/bin
 /UrlShortener.Controllers/bin
 /UrlShortener.Controllers/obj
+/UrlShortener.Controllers/Properties
