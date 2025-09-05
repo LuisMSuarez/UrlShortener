@@ -1,9 +1,9 @@
-using Xunit;
-using Moq;
 using Microsoft.AspNetCore.Mvc;
-using UrlShortenerApi.Controllers;
-using UrlShortenerApi.Services.Contracts;
+using Moq;
 using UrlShortenerApi.Services;
+using UrlShortenerApi.Services.Contracts;
+
+namespace UrlShortenerApi.Controllers.Tests;
 
 public class UrlControllerTests
 {
@@ -39,7 +39,7 @@ public class UrlControllerTests
     [Fact]
     public async Task Get_WithMissingShortcut_ReturnsNotFound()
     {
-        mockService.Setup(s => s.GetUrlShortcutAsync("abc")).ReturnsAsync((UrlShortcut)null);
+        mockService.Setup(s => s.GetUrlShortcutAsync("abc")).ReturnsAsync((UrlShortcut?)null);
 
         var result = await controller.Get("abc");
 
@@ -124,7 +124,7 @@ public class UrlControllerTests
 
         var result = await controller.Post(input);
 
-        var error = Assert.IsType<ObjectResult>(result);
+        var error = Assert.IsType<StatusCodeResult>(result);
         Assert.Equal(500, error.StatusCode);
     }
 
