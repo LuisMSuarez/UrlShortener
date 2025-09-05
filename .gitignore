@@ -15,3 +15,4 @@ UrlShortenerApi/appsettings.json
 /UrlShortener.Controllers/Properties
 /UrlShortenerApi.Controllers.Tests/obj
 /UrlShortenerApi.Controllers.Tests/bin
+/TestResults-Debug

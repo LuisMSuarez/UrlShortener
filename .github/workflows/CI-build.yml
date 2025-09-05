@@ -78,8 +78,8 @@ jobs:
       run: dotnet build --configuration ${{matrix.configuration}}
     
     # Execute all unit tests in the solution
-    #- name: Test with the dotnet CLI
-    #  run: dotnet test --no-build --configuration ${{matrix.configuration}} --collect:"XPlat Code Coverage" --logger trx --results-directory "TestResults-${{ matrix.configuration }}"
+    - name: Test with the dotnet CLI
+      run: dotnet test --no-build --configuration ${{matrix.configuration}} --collect:"XPlat Code Coverage" --logger trx --results-directory "TestResults-${{ matrix.configuration }}"
 
     # Upload the build artifacts: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
