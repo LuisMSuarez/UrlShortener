@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlShortenerApi.Services", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlShortenerApi.Controllers", "UrlShortener.Controllers\UrlShortenerApi.Controllers.csproj", "{22E31508-848C-45EA-954A-FE1692D50B93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlShortenerApi.Controllers.Tests", "UrlShortenerApi.Controllers.Tests\UrlShortenerApi.Controllers.Tests.csproj", "{C83B3392-B281-44AA-8C85-8B5BFD3AFC06}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{22E31508-848C-45EA-954A-FE1692D50B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22E31508-848C-45EA-954A-FE1692D50B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22E31508-848C-45EA-954A-FE1692D50B93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C83B3392-B281-44AA-8C85-8B5BFD3AFC06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C83B3392-B281-44AA-8C85-8B5BFD3AFC06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C83B3392-B281-44AA-8C85-8B5BFD3AFC06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C83B3392-B281-44AA-8C85-8B5BFD3AFC06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
