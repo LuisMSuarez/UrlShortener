@@ -1,18 +1,14 @@
-/UrlShortenerApi/.vs/UrlShortenerApi/CopilotIndices
-/UrlShortenerApi/.vs
-/UrlShortenerApi/bin
-/UrlShortenerApi/obj
+# Ignore Visual Studio artifacts
+.vs/
+**/CopilotIndices
+
+# Ignore build outputs
+**/bin/
+**/obj/
+TestResults-Debug/
+
+# Ignore app settings (if not meant for versioning)
 UrlShortenerApi/appsettings.json
-/UrlShortener.Utils/bin
-/UrlShortener.Utils/obj
-/UrlShortener.DataAccess/obj
-/UrlShortener.DataAccess/bin
-/.vs
-/UrlShortener.Services/obj
-/UrlShortener.Services/bin
-/UrlShortener.Controllers/bin
-/UrlShortener.Controllers/obj
-/UrlShortener.Controllers/Properties
-/UrlShortenerApi.Controllers.Tests/obj
-/UrlShortenerApi.Controllers.Tests/bin
-/TestResults-Debug
+
+# Ignore project-specific folders
+UrlShortener.Controllers/Properties/
